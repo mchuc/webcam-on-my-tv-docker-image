@@ -5,13 +5,13 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   </head>
   <body>
-    <h6>Live Stream</h6>
+    <h6>Stream Test</h6>
     <video id="video" controls autoplay muted style="width: 100%; max-width: 720px"></video>
     <script>
       if (Hls.isSupported()) {
         const video = document.getElementById("video");
         const hls = new Hls();
-        hls.loadSource("/stream/playlist.m3u8");
+        hls.loadSource("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
         hls.attachMedia(video);
 
         // Autoplay w JavaScript
@@ -20,7 +20,7 @@
         });
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         const video = document.getElementById("video");
-        video.src = "/stream/playlist.m3u8";
+        video.src = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
         // Autoplay w JavaScript
         video.play().catch(error => {

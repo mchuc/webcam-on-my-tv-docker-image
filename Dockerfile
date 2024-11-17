@@ -15,6 +15,8 @@ COPY default_page /etc/nginx/sites-available/default
 
 # Skopiuj stronę HTML
 COPY index.html /var/www/html/index.html
+# Testuję, czy w ogóle player działa, jeśli nie mam streama...
+COPY test.html /var/www/html/test.html
 
 # Skrypt startowy do uruchomienia FFmpeg i NGINX
 COPY start.sh /start.sh

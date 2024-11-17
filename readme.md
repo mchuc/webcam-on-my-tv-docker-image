@@ -79,6 +79,12 @@ http://localhost:8080
 
 You will see the HTML5 player streaming your multicast input.
 
+Test Your TV in general:
+
+```
+http://localhost:8080/test.html
+```
+
 ---
 
 ## Folder Structure
