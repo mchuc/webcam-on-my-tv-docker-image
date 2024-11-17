@@ -3,27 +3,35 @@
 # Ustawienia domyślne
 MULTICAST=${MULTICAST:-"235.206.241.161"}
 PORT=${PORT:-34048}
+PLAYPATH=${PLAYPATH:-""}  # Domyślnie brak playpath
 
-# Sprawdź, czy MULTICAST i PORT są ustawione
-if [ -z "$MULTICAST" ]; then
-    echo "MULTICAST nie jest ustawiony! Ustaw wartość zmiennej środowiskowej MULTICAST. MULTICAST is not set! Set the value of the MULTICAST environment variable."
-    exit 1
+# Jeśli podano PLAYPATH (RTSP), konwertuj na HLS
+if [ -n "$PLAYPATH" ]; then
+    echo "Uruchamianie konwersji RTSP: $PLAYPATH do HLS playlist.m3u8"
+    ffmpeg -i "$PLAYPATH" \
+        -c:v copy \
+        -f hls \
+        -hls_time 2 \
+        -hls_list_size 3 \
+        -hls_flags delete_segments \
+        /var/www/html/stream/playlist.m3u8 &
+else
+    # Sprawdź, czy MULTICAST i PORT są ustawione
+    if [ -z "$MULTICAST" ]; then
+        echo "MULTICAST nie jest ustawiony! Ustaw wartość zmiennej środowiskowej MULTICAST."
+        exit 1
+    fi
+
+    echo "Uruchamianie konwersji multicast: udp://@$MULTICAST:$PORT do HLS playlist.m3u8"
+    ffmpeg -i "udp://@$MULTICAST:$PORT" \
+        -c:v copy \
+        -f hls \
+        -hls_time 2 \
+        -hls_list_size 3 \
+        -hls_flags delete_segments \
+        /var/www/html/stream/playlist.m3u8 &
 fi
 
-# Skonfiguruj pełny adres multicast
-INPUT="udp://@$MULTICAST:$PORT"
-
-echo "Uruchamianie FFmpeg z adresem: $INPUT Running FFmpg with address: $INPUT"
-
-# Uruchom FFmpeg do transkodowania multicast -> HLS
-ffmpeg -i "$INPUT" \
-    -c:v copy \
-    -f hls \
-    -hls_time 2 \
-    -hls_list_size 3 \
-    -hls_flags delete_segments \
-    /var/www/html/stream/playlist.m3u8 &
-
 # Uruchom NGINX
-echo "Uruchomienie NGINX"
+echo "Uruchamianie NGINX"
 nginx -g 'daemon off;'

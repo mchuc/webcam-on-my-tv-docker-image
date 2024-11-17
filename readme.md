@@ -16,10 +16,11 @@ This Docker image enables you to stream multicast video and serve it via HTTP as
 
 ### Environment Variables
 
-| Variable    | Default Value     | Description                            |
-| ----------- | ----------------- | -------------------------------------- |
-| `MULTICAST` | `235.206.241.161` | Multicast address of the input stream. |
-| `PORT`      | `34048`           | Multicast port for the input stream.   |
+| Variable    | Default Value     | Description                                                      |
+| ----------- | ----------------- | ---------------------------------------------------------------- |
+| `MULTICAST` | `235.206.241.161` | Multicast address of the input stream.                           |
+| `PORT`      | `34048`           | Multicast port for the input stream.                             |
+| `PLAYPATH`  | `none`            | Multicast RSTP stream. If given, Multicast and Port are ignored. |
 
 ### Network
 
@@ -69,6 +70,17 @@ docker run -d \
  chuc/webcam-on-my-tv-docker-image
 ```
 
+or for rstp:
+
+```bash
+docker run -d \
+ --name webcam_on_my_tv \
+ -e PLAYPATH="rtsp://syno:njjjddd@192.168.1.2:123/Sms=3.multicast" \
+ -p 8080:8080 \
+ --network=host \
+ chuc/webcam-on-my-tv-docker-image
+```
+
 ### 4. Access the Web Interface
 
 Open a browser and navigate to:
@@ -98,7 +110,8 @@ The project structure:
 ├── index.html       # Web interface
 ├── LICENCE          # license
 ├── readme.md        # this file
-└── start.sh         # Startup script for FFmpeg and NGINX
+├── start.sh         # Startup script for FFmpeg and NGINX
+└── test.html        # Web interface - test stream with autostart
 
 ```
 
@@ -115,6 +128,17 @@ docker run -d \
  --name webcam_on_my_tv \
  -e MULTICAST="235.206.241.161" \
  -e PORT=1234 \
+ -p 8080:8080 \
+ --network=host \
+ chuc/webcam-on-my-tv-docker-image
+```
+
+or for rstp:
+
+```bash
+docker run -d \
+ --name webcam_on_my_tv \
+ -e PLAYPATH="rtsp://syno:njjjddd@192.168.1.2:123/Sms=3.multicast" \
  -p 8080:8080 \
  --network=host \
  chuc/webcam-on-my-tv-docker-image
