@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean
 
 # Utwórz katalog dla plików HLS
-RUN mkdir -p /var/www/html/stream
+RUN mkdir -p /var/www/html/stream && chmod -R 755 /var/www/html/stream
 
 # Skopiuj plik konfiguracyjny NGINX
 COPY default_page /etc/nginx/sites-available/default

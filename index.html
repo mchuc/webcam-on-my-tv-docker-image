@@ -1,31 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>webcam-on-my-tv Docker Image by Marcin Chuć</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   </head>
   <body>
-    <h6>Live Stream</h6>
-    <video id="video" controls autoplay muted style="width: 100%; max-width: 720px"></video>
+    <h6>Life stream</h6>
+    <video id="video" controls muted style="width: 100%; max-width: 720px"></video>
     <script>
       if (Hls.isSupported()) {
         const video = document.getElementById("video");
-        const hls = new Hls();
+        const hls = new Hls({
+          maxBufferSize: 60 * 1000, // Zwiększ maksymalny rozmiar bufora
+          maxBufferLength: 30, // Buforuj do 30 sekund wideo
+        });
         hls.loadSource("/stream/playlist.m3u8");
         hls.attachMedia(video);
 
-        // Autoplay w JavaScript
-        video.play().catch(error => {
-          console.error("Autoplay failed:", error);
-        });
+        // Opóźniony autostart o 5 sekund
+        setTimeout(() => {
+          video.play().catch(error => {
+            console.error("Autoodtwarzanie nie powiodło się:", error);
+          });
+        }, 5000);
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         const video = document.getElementById("video");
         video.src = "/stream/playlist.m3u8";
 
-        // Autoplay w JavaScript
-        video.play().catch(error => {
-          console.error("Autoplay failed:", error);
-        });
+        // Opóźniony autostart o 5 sekund
+        setTimeout(() => {
+          video.play().catch(error => {
+            console.error("Autoodtwarzanie nie powiodło się:", error);
+          });
+        }, 5000);
       }
     </script>
   </body>
