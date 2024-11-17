@@ -129,6 +129,11 @@ The HTML player is stored in `index.html`. You can customize it to fit your requ
    - Check if the multicast address and port are correct.
    - Inspect FFmpeg logs by running: `docker logs webcam_on_my_tv`.
 
+   ```
+    - On Mac/Windows in Docker Desktop
+   In Settings > Resources > Networking be sure to check "Enable host networking"
+   ```
+
 3. **Firewall Issues**:
    - Ensure the necessary ports are open (multicast port and HTTP port 8080).
 
