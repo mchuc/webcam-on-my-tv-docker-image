@@ -88,9 +88,12 @@ The project structure:
 ```
 .
 ├── Dockerfile       # Defines the Docker image
-├── nginx.conf       # NGINX configuration
+├── default_page     # NGINX configuration
 ├── index.html       # Web interface
+├── LICENCE          # license
+├── readme.md        # this file
 └── start.sh         # Startup script for FFmpeg and NGINX
+
 ```
 
 ---
