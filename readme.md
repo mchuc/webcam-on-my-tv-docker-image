@@ -16,16 +16,19 @@ This Docker image enables you to stream multicast video and serve it via HTTP as
 
 ### Environment Variables
 
-| Variable    | Default Value     | Description                                                      |
-| ----------- | ----------------- | ---------------------------------------------------------------- |
-| `MULTICAST` | `235.206.241.161` | Multicast address of the input stream.                           |
-| `PORT`      | `34048`           | Multicast port for the input stream.                             |
-| `PLAYPATH`  | `none`            | Multicast RSTP stream. If given, Multicast and Port are ignored. |
+| Variable         | Default Value     | Description                                                      |
+| ---------------- | ----------------- | ---------------------------------------------------------------- |
+| `MULTICAST`      | `235.206.241.161` | Multicast address of the input stream.                           |
+| `PORT`           | `34048`           | Multicast port for the input stream.                             |
+| `PLAYPATH`       | `none`            | RTSP stream. If given, Multicast and Port are ignored.           |
+| `BUFFER_TIME`    | `10`              | Buffer duration in seconds for HLS segments.                     |
+| `BUFFER_PARTS`   | `3`               | Number of parts in the HLS playlist to keep in memory.           |
+| `RECONNECT_TIME` | `10`              | Delay in seconds before attempting to reconnect after a failure. |
 
 ### Network
 
 - **Host Networking**: The container uses `--network=host` to properly receive multicast traffic.
-- **HTTP Port**: The web interface and HLS files are served on port 80.
+- **HTTP Port**: The web interface and HLS files are served on port 8080.
 
 ---
 
@@ -139,6 +142,7 @@ or for rstp:
 docker run -d \
  --name webcam_on_my_tv \
  -e PLAYPATH="rtsp://syno:njjjddd@192.168.1.2:123/Sms=3.multicast" \
+ -e BUFFER_TIME=3 \
  -p 8080:8080 \
  --network=host \
  chuc/webcam-on-my-tv-docker-image

@@ -1,5 +1,14 @@
 FROM debian:bullseye-slim
 
+# Zmienne środowiskowe, dla podpowiedzi w Docker Desktop
+# Environment variables with default values
+ENV MULTICAST="235.206.241.161"
+ENV PORT=34048
+ENV PLAYPATH=""
+ENV BUFFER_TIME=10
+ENV BUFFER_PARTS=3
+ENV RECONNECT_TIME=10
+
 # Zainstaluj wymagane pakiety (FFmpeg i NGINX)
 RUN apt-get update && apt-get install -y \
     ffmpeg \
