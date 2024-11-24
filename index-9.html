@@ -3,36 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>webcam-on-my-tv Docker Image by Marcin Chuć, single stream</title>
+    <title>webcam-on-my-tv Docker Image by Marcin Chuć, nine streams</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
       body {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 10px;
         margin: 0;
         padding: 0;
         background-color: black;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         height: 100vh;
       }
-      .video-stream {
-        width: 90%;
-        height: auto;
+      video {
+        width: 100%;
+        height: 100%;
         background-color: black;
-        border: 2px solid #fff;
+        border: 2px solid #000;
         border-radius: 5px;
       }
     </style>
   </head>
   <body>
-    <video id="video1" class="video-stream" controls muted></video>
+    <video id="video1" controls muted></video>
+    <video id="video2" controls muted></video>
+    <video id="video3" controls muted></video>
+    <video id="video4" controls muted></video>
+    <video id="video5" controls muted></video>
+    <video id="video6" controls muted></video>
+    <video id="video7" controls muted></video>
+    <video id="video8" controls muted></video>
+    <video id="video9" controls muted></video>
     <script>
       const setupStream = (videoElementId, playlist) => {
         const video = document.getElementById(videoElementId);
         if (Hls.isSupported()) {
           const hls = new Hls({
-            maxBufferSize: 60 * 1000, // Zwiększ maksymalny rozmiar bufora
-            maxBufferLength: 30, // Buforuj do 30 sekund wideo
+            maxBufferSize: 60 * 1000,
+            maxBufferLength: 30,
           });
           hls.loadSource(playlist);
           hls.attachMedia(video);
@@ -52,8 +61,16 @@
         }
       };
 
-      // Setup stream
+      // Setup streams for 9 videos
       setupStream("video1", "/stream/playlist_0.m3u8");
+      setupStream("video2", "/stream/playlist_1.m3u8");
+      setupStream("video3", "/stream/playlist_2.m3u8");
+      setupStream("video4", "/stream/playlist_3.m3u8");
+      setupStream("video5", "/stream/playlist_4.m3u8");
+      setupStream("video6", "/stream/playlist_5.m3u8");
+      setupStream("video7", "/stream/playlist_6.m3u8");
+      setupStream("video8", "/stream/playlist_7.m3u8");
+      setupStream("video9", "/stream/playlist_8.m3u8");
     </script>
   </body>
 </html>

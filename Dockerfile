@@ -22,8 +22,11 @@ RUN mkdir -p /var/www/html/stream && chmod -R 755 /var/www/html/stream
 # Skopiuj plik konfiguracyjny NGINX
 COPY default_page /etc/nginx/sites-available/default
 
-# Skopiuj stronę HTML
+# Skopiuj strony HTML
 COPY index.html /var/www/html/index.html
+COPY index-2.html /var/www/html/index-2.html
+COPY index-4.html /var/www/html/index-4.html
+COPY index-9.html /var/www/html/index-9.html
 # Testuję, czy w ogóle player działa, jeśli nie mam streama...
 COPY test.html /var/www/html/test.html
 

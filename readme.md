@@ -1,14 +1,16 @@
 # Webcam-On-My-TV Docker Image
 
-This Docker image enables you to stream multicast video and serve it via HTTP as HLS. The image uses **FFmpeg** to transcode multicast streams and **NGINX** to serve the HLS stream and an accompanying web interface.
+This Docker image enables you to stream multicast or RTSP video and serve it via HTTP as HLS. The image uses **FFmpeg** to transcode streams and **NGINX** to serve the HLS stream and an accompanying web interface.
 
 ---
 
 ## Features
 
-- **Dynamic Multicast Configuration**: Configure the multicast address and port using environment variables.
-- **HLS Streaming**: Converts multicast to HTTP Live Streaming (HLS) for browser compatibility.
+- **Dynamic Multicast and RTSP Configuration**: Configure multiple multicast addresses or RTSP streams using environment variables.
+- **HLS Streaming**: Converts input streams to HTTP Live Streaming (HLS) for browser compatibility.
 - **Integrated Web Server**: NGINX serves the HLS stream and an HTML player on port 8080.
+- **Source Prioritization**: If both RTSP (`PLAYPATH`) and multicast (`MULTICAST`) are provided, RTSP takes priority, and multicast is ignored.
+- **Support for Multiple Streams**: Process multiple multicast or RTSP streams simultaneously.
 
 ---
 
@@ -16,14 +18,14 @@ This Docker image enables you to stream multicast video and serve it via HTTP as
 
 ### Environment Variables
 
-| Variable         | Default Value     | Description                                                      |
-| ---------------- | ----------------- | ---------------------------------------------------------------- |
-| `MULTICAST`      | `235.206.241.161` | Multicast address of the input stream.                           |
-| `PORT`           | `34048`           | Multicast port for the input stream.                             |
-| `PLAYPATH`       | `none`            | RTSP stream. If given, Multicast and Port are ignored.           |
-| `BUFFER_TIME`    | `10`              | Buffer duration in seconds for HLS segments.                     |
-| `BUFFER_PARTS`   | `3`               | Number of parts in the HLS playlist to keep in memory.           |
-| `RECONNECT_TIME` | `10`              | Delay in seconds before attempting to reconnect after a failure. |
+| Variable         | Default Value     | Description                                                                        |
+| ---------------- | ----------------- | ---------------------------------------------------------------------------------- |
+| `MULTICAST`      | `235.206.241.161` | Multicast address(es) of the input stream(s), separated by `\|`                    |
+| `PORT`           | `34048`           | Multicast port for the input stream(s).                                            |
+| `PLAYPATH`       | `none`            | RTSP stream(s). If given, multicast is ignored. Multiple streams separated by `\|` |
+| `BUFFER_TIME`    | `10`              | Buffer duration in seconds for HLS segments.                                       |
+| `BUFFER_PARTS`   | `3`               | Number of parts in the HLS playlist to keep in memory.                             |
+| `RECONNECT_TIME` | `10`              | Delay in seconds before attempting to reconnect after a failure.                   |
 
 ### Network
 
@@ -36,8 +38,16 @@ This Docker image enables you to stream multicast video and serve it via HTTP as
 
 You can also pull the pre-built Docker image from Docker Hub:
 
+for Linux, Windows, Synology:
+
 ```bash
 docker pull chuc/webcam-on-my-tv-docker-image:latest
+```
+
+for Mac:
+
+```bash
+docker pull chuc/webcam-on-my-tv-docker-image:apple-silicon
 ```
 
 ## Setup and Usage
@@ -66,7 +76,7 @@ Run the container with your desired multicast settings:
 ```bash
 docker run -d \
  --name webcam_on_my_tv \
- -e MULTICAST="235.206.241.161" \
+ -e MULTICAST="235.206.241.161|123.223.11.17" \
  -e PORT=34048 \
  -p 8080:8080 \
  --network=host \
@@ -108,13 +118,19 @@ The project structure:
 
 ```
 .
-├── Dockerfile       # Defines the Docker image
-├── default_page     # NGINX configuration
-├── index.html       # Web interface
-├── LICENCE          # license
-├── readme.md        # this file
-├── start.sh         # Startup script for FFmpeg and NGINX
-└── test.html        # Web interface - test stream with autostart
+├── Dockerfile           # Defines the Docker image
+├── nginx_default.conf   # NGINX configuration
+├── index.html           # Web interface for 1 stream
+├── index-2.html         # Web interface for 2 streams
+├── index-4.html         # Web interface for 4 streams
+├── index-9.html         # Web interface for 9 streams
+├── test.html            # Web interface - test stream with autostart
+├── start.sh             # Startup script for FFmpeg and NGINX
+├── build-apple.sh       # Script for building the Docker image on macOS
+├── build-linux.sh       # Script for building the Docker image on Linux
+├── LICENCE              # License file
+└── readme.md            # Documentation for the project
+
 
 ```
 
